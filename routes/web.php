@@ -11,26 +11,28 @@
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-});
 
-
-Route::view('/login', 'login');
+Route::view('/login', 'login')->name('login');
 Route::view('/register','register');
 
 Route::post('login', 'AuthController@login');
-Route::get('logout', 'AuthController@logout');
+
+Route::group(['middleware'=>'auth'], function(){
 
 
-Route::resource('users', 'UserController');
-Route::resource('members', 'MemberController');
-Route::resource('schools', 'SchoolController');
-Route::resource('atolls', 'AtollController');
-Route::resource('islands', 'IslandController');
-Route::resource('roles', 'RoleController');
+    Route::get('/', function () {
+        return view('dashboard');
+    });
+    Route::get('logout', 'AuthController@logout');
+    Route::resource('users', 'UserController');
+    Route::resource('members', 'MemberController');
+    Route::resource('schools', 'SchoolController');
+    Route::resource('atolls', 'AtollController');
+    Route::resource('islands', 'IslandController');
+    Route::resource('roles', 'RoleController');
 
-Route::view('profile','profile');
+    Route::view('profile','profile');
+});
 
 
-Route::view('datepicker','datepicker');
+// Route::view('datepicker','datepicker');
