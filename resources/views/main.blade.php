@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}""> --}}
     <title>Scout Membership| Scouts</title>
 
     @include('./partials/styles')
@@ -19,7 +19,7 @@
   </head>
 
   <body class="nav-md">
-        <script src="../vendors/jquery/dist/jquery.min.js"></script>
+        <script src=" {{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
         {{-- <script src="../vendors/Flot/examples/shared/jquery-ui/jquery-ui.min.js"></script> --}}
 
 

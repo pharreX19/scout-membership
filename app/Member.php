@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Atoll;
+use App\Island;
 use App\School;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -53,10 +55,10 @@ class Member extends Model
         'island_id' => 'sometimes|numeric|exists:islands,id',
         'id_number' => 'string|sometimes|max:8',
         'school_id' => 'sometimes|numeric|exists:schools,id',
-        'birth_date' => 'date|requried',
+        'birth_date' => 'date|sometimes',
         'address'=> 'string|nullable|max:30',
-        'contact'=> 'numeric|nullable|max:7',
-        'email' => 'email|nullable|max:30|unique:members',
+        'contact'=> 'numeric|nullable|digits:7',
+        'email' => 'email|nullable|max:30|unique:members,email',
         'joined_date' => 'date|sometimes',
         'is_approved' => 'boolean|sometimes'
     ];
@@ -69,6 +71,14 @@ class Member extends Model
     public function getBirthDateAttribute($value){
         $dob = Carbon::parse($value);
         return $dob->format('d-m-Y');
+    }
+
+    public function atoll(){
+        return $this->belongsTo(Atoll::class);
+    }
+
+    public function island(){
+        return $this->belongsTo(Island::class);
     }
 
     public function school(){

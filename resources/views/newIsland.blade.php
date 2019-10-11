@@ -10,10 +10,10 @@
             <div class="title_right">
               <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search for...">
+                  {{-- <input type="text" class="form-control" placeholder="Search for...">
                   <span class="input-group-btn">
                     <button class="btn btn-default" type="button">Go!</button>
-                  </span>
+                  </span> --}}
                 </div>
               </div>
             </div>
@@ -29,7 +29,7 @@
                 <div class="x_content">
                   <br />
                   <form class="form-horizontal form-label-left input_mask" action="{{url('/islands')}}" method="POST">
-
+                    @csrf
                     <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Atoll</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">

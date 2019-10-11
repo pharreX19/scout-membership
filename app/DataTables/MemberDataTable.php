@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use Member;
+use App\Member;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -21,17 +21,18 @@ class MemberDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', function(){
-                $btn = '<a href="/documents/" class="fa fa-edit fa-lg"></a>';
+            ->addColumn('action', function($row){
+                $btn = '<a href="/members/'.$row->id.'/edit" class="fa fa-edit fa-lg"></a>
+                        &nbsp;<a href="#" data-info="'.$row->id.'" data-target="#deleteModal" data-toggle="modal" class="fa fa-trash fa-lg"></a>';
                 return $btn;
             })
-            ->addColumn('atoll', function($row){
+            ->addColumn('atoll_id', function($row){
                 return $row->atoll->name;
             })
-            ->addColumn('island', function($row){
+            ->addColumn('island_id', function($row){
                 return $row->island->name;
             })
-            ->addColumn('school', function($row){
+            ->addColumn('school_id', function($row){
                 return $row->school->name;
             });
     }
@@ -55,18 +56,18 @@ class MemberDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('datatable-buttons')
+                    //->setTableId('datatable-buttons')
                     ->setTableAttribute('class','table table-striped table-bordered')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->dom('Bfrtip')
+                    ->dom('lBfrtip')
                     ->orderBy(1)
                     ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
+                        Button::make('copy'),
+                        Button::make('csv'),
                         Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
+                        // Button::make('reset'),
+                        // Button::make('reload')
                     );
     }
 
@@ -84,10 +85,10 @@ class MemberDataTable extends DataTable
             Column::make('birth_date'),
             Column::make('contact'),
             Column::make('email'),
-            Column::make('atoll'),
-            Column::make('island'),
-            Column::make('school'),
-            Column::make('joined on'),
+            Column::make('atoll_id'),
+            Column::make('island_id'),
+            Column::make('school_id'),
+            Column::make('joined_date'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

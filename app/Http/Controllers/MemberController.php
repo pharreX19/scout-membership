@@ -6,6 +6,7 @@ use App\Member;
 use Illuminate\Http\Request;
 use App\Repositories\MemberRepo;
 use App\DataTables\MemberDataTable;
+use Illuminate\Support\Facades\View;
 use App\Http\Controllers\BaseController;
 
 class MemberController extends BaseController
@@ -24,5 +25,17 @@ class MemberController extends BaseController
     public function create()
     {
         return view('newMembership');
+    }
+
+
+    public function edit($id)
+    {
+        $member = $this->repo->show($id);
+        return view('newMembership')->with('member',$member);
+    }
+
+    public function update(Request $request,$id){
+        $this->model::$updateRules['email'] = $this->model::$updateRules['email'].','.$id;
+        return parent::update($request,$id);
     }
 }

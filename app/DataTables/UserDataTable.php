@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use User;
+use App\User;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -24,21 +24,26 @@ class UserDataTable extends DataTable
             ->setRowAttr([
                 'align'=>'center'
             ])
-            ->addColumn('action', 'user.action')
+
+            ->addColumn('action', function($row){
+                $btn = '<a href="#" data-toggle="modal" data-info="'.$row->role_id.','.$row->is_approved.','.$row->id.'"data-target="#userUpdateModal" class="fa fa-edit fa-lg"></a>&nbsp;
+                <a href="#" data-toggle="modal" data-info="'.$row->id.'"data-target="#deleteModal" class="fa fa-trash fa-lg"></a>';
+                return $btn;
+            })
             ->addColumn('role_id', function($row){
-                return $row->role['name'];
+                return $row->role->name;
             });
-    }
+    ;}
 
     /**
      * Get query source of dataTable.
      *
-     * @param \User $model
+     * @param \Document $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(User $model)
     {
-        return $model->newQuery()->select('name','email','role_id','created_at','updated_at');
+        return $model->newQuery();
     }
 
     /**
@@ -49,18 +54,19 @@ class UserDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('datatable-buttons')
+                    //->setTableId('datatable-buttons')
                     ->setTableAttribute('class','table table-striped table-bordered')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
+                    ->dom('lBfrtip')
+                    ->orderBy(0)
+                    ->pageLength(10)
                     ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
+                        Button::make('copy'),
+                        Button::make('csv'),
                         Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
+                        //Button::make('view'),
+                        //Button::make('reload')
                     );
     }
 
@@ -74,14 +80,15 @@ class UserDataTable extends DataTable
         return [
             Column::make('name'),
             Column::make('email'),
-            Column::make('role'),
+            Column::make('role_id'),
             Column::make('created_at'),
             Column::make('updated_at'),
+            Column::make('is_approved'),
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center')
+            ->exportable(false)
+            ->printable(false)
+            ->width(20)
+            ->addClass('text-center'),
         ];
     }
 
@@ -92,6 +99,9 @@ class UserDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'User_' . date('YmdHis');
+        return 'Documents_' . date('YmdHis');
     }
 }
+
+
+

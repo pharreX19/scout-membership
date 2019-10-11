@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Atoll;
+use App\Member;
 use App\School;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -36,5 +37,9 @@ class Island extends Model
 
     public function schools(){
         return $this->hasMany(School::class);
+    }
+
+    public function member(){
+        return $this->hasMany(Member::class);
     }
 }

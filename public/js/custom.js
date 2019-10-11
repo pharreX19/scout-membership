@@ -1,13 +1,27 @@
 var result;
-function getData(url, parent) {
+function getData(url, parent, selected = null) {
     $.ajax({
         url: url,
         type: "GET",
         success: function(res) {
             result = res;
             $.each(res, function(index, data) {
-                var option =
-                    `<option value=` + data.id + `>` + data.name + `</option>`;
+                if (selected && selected == data.id) {
+                    var option =
+                        `<option value=` +
+                        data.id +
+                        ` selected="selected" >` +
+                        data.name +
+                        `</option>`;
+                } else {
+                    var option =
+                        `<option value=` +
+                        data.id +
+                        `>` +
+                        data.name +
+                        `</option>`;
+                }
+                console.log(option);
                 $(parent).append(option);
             });
         }

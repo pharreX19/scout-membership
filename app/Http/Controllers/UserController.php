@@ -20,7 +20,7 @@ class UserController extends BaseController
 
     public function index(Request $request){
         $dataTable = new UserDataTable();
-        return $dataTable->render('newUser');
+        return $dataTable->render('users');
     }
 
     public function store(Request $request)

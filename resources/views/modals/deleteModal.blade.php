@@ -18,7 +18,7 @@
 
 
                             <div >
-                                <button id="payment-button" type="submit" class="btn btn-md btn-danger btn-block">
+                                <button type="submit" class="btn btn-md btn-danger btn-block">
                                     <i class="fa fa-trash"></i>&nbsp;
                                     <span id="create-button">Delete</span>
                                 </button>

@@ -13,29 +13,6 @@
                   </div>
                   <div class="x_content">
                         {!! $dataTable->table() !!}
-                    {{-- <table id="datatable-buttons" class="table table-striped table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Position</th>
-                          <th>Office</th>
-                          <th>Age</th>
-                          <th>Start date</th>
-                          <th>Salary</th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr>
-                          <td>Donna Snider</td>
-                          <td>Customer Support</td>
-                          <td>New York</td>
-                          <td>27</td>
-                          <td>2011/01/25</td>
-                          <td>$112,000</td>
-                        </tr>
-                      </tbody>
-                    </table> --}}
                   </div>
                 </div>
               </div>
@@ -44,6 +21,16 @@
         </div>
       </div>
     </div>
+    @include('./modals/deleteModal')
 
-
+    <script>
+        $('#deleteModal').on('show.bs.modal',function(e){
+            var id = e.relatedTarget.getAttribute('data-info');
+            $('#deleteModal form').attr('action','/members/'+id);
+        })
+    </script>
 @endsection
+
+@push('scripts')
+{!! $dataTable->scripts() !!}
+@endpush

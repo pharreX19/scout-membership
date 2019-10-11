@@ -10,6 +10,6 @@ class MemberRepo extends BaseRepo
     public function __construct()
     {
         $this->model = Member::class;
-        $this->with=['school'];
+        $this->with=['atoll','island','school'];
     }
 }

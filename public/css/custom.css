@@ -5,3 +5,7 @@
 .input-group{
     margin-bottom: 0px !important;
 }
+
+div.dataTables_wrapper div.dataTables_processing {
+    display: none !important;
+}

@@ -99,6 +99,7 @@ class BaseController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        // dd($data);
         $validator = Validator::make($data, $this->model::$updateRules);
         if($validator->fails()){
             return $validator->errors();

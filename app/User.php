@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role_id','file_path'
+        'name', 'email', 'password','role_id','file_path','is_approved'
     ];
 
     /**
@@ -39,6 +39,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_approved' => 'boolean'
     ];
     protected $date = [
         'deleted_at'
