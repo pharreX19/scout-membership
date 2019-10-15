@@ -25,6 +25,7 @@ class UserController extends BaseController
 
     public function store(Request $request)
     {
+
         $data = $request->all();
         $validator = Validator::make($data, $this->model::$rules);
         if($validator->fails()){
@@ -36,6 +37,7 @@ class UserController extends BaseController
             $uploadedFileName = $this->uploadFile($request);
             $request->request->add(['file_path' => $uploadedFileName]);
         }
+
         $result = $this->repo->store($request);
         if($result){
             Toastr::success('User Created Success! Please login');
@@ -43,4 +45,6 @@ class UserController extends BaseController
         }
         return 'Error occured!';
     }
+
+
 }

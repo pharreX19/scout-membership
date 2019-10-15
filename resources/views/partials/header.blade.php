@@ -5,13 +5,13 @@
               <a id="menu_toggle"><i class="fa fa-bars"></i></a>
             </div>
 
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" id="notification">
               <li class="">
                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                     @if(Auth::user()->file_path)
-                    <img src= "{{ asset ('storage/'.\Auth::user()->file_path) }}" alt="">{{ Auth::user()->name }}
+                    <img src= "{{ asset ('storage/'.\Auth::user()->file_path) }}" alt="">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}
                     @else
-                    <img src= "{{ asset ('build/images/img.jpg') }}" alt="">{{ Auth::user()->name }}
+                    <img src= "{{ asset ('build/images/img.jpg') }}" alt="">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}
                     @endif
                   <span class=" fa fa-angle-down"></span>
                 </a>
@@ -36,26 +36,34 @@
                 <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                     @foreach(Auth::user()->unreadNotifications as $notification)
                   <li>
-                    <a>
-                      <span class="image"><img src="{{ asset ('storage/'.\Auth::user()->file_path) }}" alt="Profile Image" /></span>
+                    <a onclick="readNotification('{{ $notification->id }}')">
+                      {{-- <span class="image"><img src="{{ asset ('storage/'.\Auth::user()->file_path) }}" alt="Profile Image" /></span> --}}
                       <span>
-                      <span>{{ $notification->data['form_number'] }}</span>
+                      <span>ID-Number: {{ $notification->data['form_number'] }}</span>
                       <span class="time">{{ $notification->created_at->format('d-m-Y') }}</span>
                       </span>
                       <span class="message">
-                        waiting for admin approval...
+                            @if($notification->type == 'App\Notifications\FormApprovedNotification')
+                                Form Approved by Admin!
+                            @else
+                                waiting for admin approval...
+                            @endif
                       </span>
                     </a>
                   </li>
-                  @endforeach
+                  @if($loop->index == 10)
                   <li>
-                    <div class="text-center">
-                      <a>
-                        <strong>See All Alerts</strong>
-                        <i class="fa fa-angle-right"></i>
-                      </a>
-                    </div>
-                  </li>
+                        <div class="text-center">
+                        <a href="{{ url('/notifications') }}">
+                            <strong>See All Alerts</strong>
+                            <i class="fa fa-angle-right"></i>
+                          </a>
+                        </div>
+                      </li>
+                      @break
+                  @endif
+                  @endforeach
+
                 </ul>
               </li>
               @endif
@@ -63,3 +71,18 @@
           </nav>
         </div>
       </div>
+
+
+      <script>
+          function readNotification(id){
+              console.log(id);
+              $.ajax({
+                  url: '/read-notification/'+id,
+                  method: 'GET',
+                  success: function(){
+                      //$(this).remove();
+                      $('#notification').load(' #notification');
+                  }
+              })
+          }
+      </script>

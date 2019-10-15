@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col">
         <div class="left_col scroll-view">
           <div class="navbar nav_title" style="border: 0;">
-          <a href="{{ url('/')}}" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+          <a href="{{ url('/')}}" class="site_title"><i class="fa fa-paw"></i> <span>Scouts!</span></a>
           </div>
 
           <div class="clearfix"></div>
@@ -17,7 +17,7 @@
             </div>
             <div class="profile_info">
               <span>Welcome,</span>
-            <h2>{{ Auth::user()->name }}</h2>
+            <h2>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</h2>
             </div>
           </div>
           <!-- /menu profile quick info -->
@@ -39,6 +39,7 @@
                 <li><a><i class="fa fa-edit"></i> Membership <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
                   <li><a href="{{ url('/members/create')}}">New Member</a></li>
+                  <li><a href="{{ url('/members-payments')}}">Payments</a></li>
                     <li><a href="{{ url('/members')}}">Members</a></li>
                     {{-- <li><a href="form_validation.html">Form Validation</a></li>
                     <li><a href="form_wizards.html">Form Wizard</a></li>
@@ -52,6 +53,8 @@
                   <li><a href="{{ url('/atolls/create')}}">Atolls</a></li>
                   <li><a href="{{ url('/islands/create')}}">Islands</a></li>
                   <li><a href="{{ url('/users')}}">Users</a></li>
+                  <li><a href="{{ url('/ranks/create')}}">Ranks</a></li>
+                  <li><a href="{{ url('/register')}}">Register</a></li>
                   {{-- <li><a href="{{ url('/roles')}}">Roles</a></li> --}}
                     {{-- <li><a href="widgets.html">Widgets</a></li>
                     <li><a href="invoice.html">Invoice</a></li>
@@ -146,4 +149,6 @@
           <!-- /menu footer buttons -->
         </div>
       </div>
+
+
 

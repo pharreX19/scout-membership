@@ -1,0 +1,147 @@
+@extends('main')
+@section('content')
+<div class="right_col" role="main">
+        <div class="">
+          <div class="page-title">
+            <div class="title_left">
+              <h3>Payments</h3>
+            </div>
+
+            <div class="title_right">
+
+                @if(count(Request::query()) == 0 )
+              <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                <form action="{{ url('/search-pending') }}" role="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" required name="query" placeholder="Search for...">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Go!</button>
+                            </span>
+                        </div>
+                    </form>
+              </div>
+            @else
+                <button type="button" class="btn btn-round btn-default pull-right" onclick="goBack()">Back</button>
+            @endif
+            <button type="button" class="btn btn-round btn-success pull-right" onclick="selectPendingPayment()">Update</button>
+
+        </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Pending Payments <small></small></h2>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+
+                    <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>
+
+                    <div class="table-responsive">
+                        @if(isset($pendingPayments))
+                      <table class="table table-striped jambo_table bulk_action" id="members-table">
+                        <thead>
+                          <tr>
+                            <th>
+                              <input type="checkbox" id="check-all" class="flat">
+                            </th>
+                            <th class="column-title">ID Number </th>
+                            <th class="column-title">Name </th>
+                            <th class="column-title">School </th>
+                            <th class="column-title">Joined Date </th>
+                            <th class="column-title">Submitted By </th>
+                            <th class="column-title">Amount </th>
+                            {{-- <th class="column-title no-link last"><span class="nobr">Action</span> --}}
+                            </th>
+                            <th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                          </tr>
+                        </thead>
+
+
+                        <tbody>
+                          @foreach($pendingPayments as $pendingPayment)
+                        <tr id="{{ $pendingPayment->id_number }}" class="pending-payment">
+                                <td>
+                                  <input type="checkbox" class="flat" name="table_records">
+                                </td>
+                                <td class=" ">{{ $pendingPayment->id_number }}</td>
+                                <td class=" ">{{ $pendingPayment->first_name }}&nbsp;{{ $pendingPayment->last_name }}</td>
+                                <td class=" ">{{ $pendingPayment->school->name }}</td>
+                                <td class=" ">{{ $pendingPayment->joined_date }}</td>
+                                <td class=" ">{{ $pendingPayment->user->first_name }}&nbsp;{{ $pendingPayment->user->last_name }}</td>
+                                <td class="a-right a-right ">MVR 50.00</td>
+                                {{-- <td class=" last"><a href="#">View</a> --}}
+                                </td>
+                              </tr>
+                          @endforeach
+                        </tbody>
+                      </table>
+                      @else
+                      {{ $message }}
+                      @endif
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        {{ $pendingPayments->links() }}
+</div>
+
+
+
+@include('modals/userUpdateModal')
+@include('./modals/deleteModal')
+
+<script>
+        $('#deleteModal').on('show.bs.modal',function(e){
+            var id = e.relatedTarget.getAttribute('data-info');
+            $('#deleteModal form').attr('action','/users/'+id);
+        })
+</script>
+
+<script>
+    function goBack(){
+        history.back();
+    }
+    console.log($('.checked'));
+
+    $('icheckbox_flat-green').click(function(){
+        console.log('hello world');
+    })
+        var selectedRecords = $('.checked').parent().parent().attr('id');
+        console.log(selectedRecords);
+
+
+
+
+    $.ajax({
+        url: '/roles',
+        method: 'GET',
+        success: function(res){
+            $.each(res, function(index,item){
+                var option = `<option value=`+item.id+`>`+item.name+`</option>`;
+                $('#userUpdateModal #roles').append(option);
+            });
+        }
+    })
+    $('#userUpdateModal').on('show.bs.modal', function(e){
+        var userInfo = e.relatedTarget.getAttribute('data-info').split(',');
+        var roleId = userInfo[0];
+        var isApproved = 1;
+        var userId = userInfo[2];
+        $('#roles').val(roleId);
+        //$('#userUpdateModal #password').val('{{ Auth::user()->password }}');
+        $('#userUpdateModal form').attr('action','/users/'+userId);
+        // $('input:radio[name="is_approved"]').find('[value="1"]').prop('checked',true);
+    })
+
+</script>
+
+@endsection
+

@@ -45,11 +45,12 @@
     $('#userUpdateModal').on('show.bs.modal', function(e){
         var userInfo = e.relatedTarget.getAttribute('data-info').split(',');
         var roleId = userInfo[0];
-        var isApproved = userInfo[1];
+        var isApproved = 1;
         var userId = userInfo[2];
         $('#roles').val(roleId);
+        //$('#userUpdateModal #password').val('{{ Auth::user()->password }}');
         $('#userUpdateModal form').attr('action','/users/'+userId);
-        $('input:radio[name="is_approved"]').find('[value="'+isApproved+'"]').prop('checked',true);
+        // $('input:radio[name="is_approved"]').find('[value="1"]').prop('checked',true);
     })
 
 </script>

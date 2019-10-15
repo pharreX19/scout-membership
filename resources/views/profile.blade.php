@@ -30,7 +30,7 @@
                             @endif
                         </div>
                       </div>
-                      <h3>{{ Auth::user()->name }}</h3>
+                      <h3>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</h3>
 
                       <ul class="list-unstyled user_data">
                         <li><i class="fa fa-map-marker user-profile-icon"></i> {{ Auth::user()->role->name }}
@@ -41,8 +41,7 @@
                         </li>
 
                         <li class="m-top-xs">
-                          <i class="fa fa-external-link user-profile-icon"></i>
-                          <a href="http://www.kimlabs.com/profile/" target="_blank">www.kimlabs.com</a>
+                            <i class="fa fa-building user-profile-icon"></i> {{ Auth::user()->school->name }}
                         </li>
                       </ul>
                       <br />
@@ -56,6 +55,8 @@
                       </div>
                       <br>
                     <form class="form-horizontal form-label-left input_mask" action="{{ url('users/'.Auth::user()->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
                             <div class="form-group" id="atolls_select">
                                 <label for="name" id="island-name" class="control-label mb-1">Current Password</label>
                                 <input id="current-password" name="current_password" type="password" class="form-control" aria-required="true" aria-invalid="false">

@@ -21,17 +21,22 @@ class CreateMembersTable extends Migration
             $table->string('last_name');
             $table->string('id_number')->unique();
             $table->date('birth_date');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->integer('contact')->nullable();
             $table->string('email')->nullable();
             $table->date('joined_date')->default(Carbon::now());
             $table->boolean('is_approved')->default(0);
+            $table->string('file_path')->nullable();
             $table->unsignedBigInteger('atoll_id');
             $table->foreign('atoll_id')->references('id')->on('atolls')->onDelete('cascade');
             $table->unsignedBigInteger('island_id');
             $table->foreign('island_id')->references('id')->on('islands')->onDelete('cascade');
             $table->unsignedBigInteger('school_id');
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('rank_id');
+            $table->foreign('rank_id')->references('id')->on('ranks')->onDelete('cascade');
             $table->softDeletes();
         });
     }

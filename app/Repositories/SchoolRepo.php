@@ -10,6 +10,6 @@ class SchoolRepo extends BaseRepo
     public function __construct()
     {
         $this->model = School::class;
-        $this->with=['atoll','island','members'];
+        $this->with=['atoll','island','members','user'];
     }
 }

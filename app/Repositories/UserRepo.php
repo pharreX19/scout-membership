@@ -13,10 +13,11 @@ class UserRepo extends BaseRepo
     public function __construct()
     {
         $this->model = User::class;
-        $this->with=['role'];
+        $this->with=['role','school'];
     }
 
     public function update(Request $request, $id){
+
         if($request->has('password') && $request->has('current_password')){
             if(Hash::check($request->input('current_password'), Auth::user()->password)){
                 return parent::update($request, $id);
@@ -27,4 +28,5 @@ class UserRepo extends BaseRepo
             return parent::update($request, $id);
         }
     }
+
 }

@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Role;
+use App\Member;
+use App\School;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,7 +22,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role_id','file_path','is_approved'
+        'first_name',
+        'last_name',
+        'contact',
+        'atoll_id',
+        'island_id',
+        'school_id',
+        'email',
+        'password',
+        'role_id',
+        'file_path',
+        'is_approved'
     ];
 
     /**
@@ -46,12 +58,18 @@ class User extends Authenticatable
     ];
 
     public static $rules = [
-        'name' => 'required|alpha_space|max:20',
+        'first_name' => 'required|alpha_space|max:20',
+        'last_name' => 'required|alpha_space|max:20',
+        'contact'=> 'numeric|nullable|digits:7',
+        'atoll_id' => 'required|numeric|exists:atolls,id',
+        'island_id' => 'required|numeric|exists:islands,id',
+        'school_id' => 'required|numeric|exists:schools,id',
         'email' => 'required|email|max:20',
         'password' => 'required|string|max:30|confirmed',
         'role_id' => 'numeric|exists:roles,id',
         'file' => 'nullable|mimes:image,jpg,jpeg,png|max:2048',
-        'file_path' => 'nullable|string'
+        'file_path' => 'nullable|string',
+
     ];
 
     public static $updateRules = [
@@ -68,5 +86,13 @@ class User extends Authenticatable
 
     public function role(){
         return $this->belongsTo(Role::class);
+    }
+
+    public function members(){
+        return $this->hasMany(Member::class);
+    }
+
+    public function school(){
+        return $this->belongsTo(School::class);
     }
 }

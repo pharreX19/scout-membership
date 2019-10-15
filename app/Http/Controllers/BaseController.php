@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Document;
 use Illuminate\Http\Request;
 use App\Events\FormSubmitEvent;
 use Yoeunes\Toastr\Facades\Toastr;
@@ -49,13 +50,20 @@ class BaseController extends Controller
             return back()->withInput();
         }
         if($request->hasFile('file')){
-            $uploadedFileName = $this->uploadFile($request);
-            $request->request->add(['file_path' => $uploadedFileName]);
+            if(is_array($request->file('file'))){
+                foreach($request->file('file') as $file){
+                    $fileName = $this->uploadFile($request, $file);
+                    Document::create(['file_path'=> $fileName, 'member_id'=> $request->id_number]);
+                }
+            }else{
+                $uploadedFileName = $this->uploadFile($request, $request->file('file'));
+                $request->request->add(['file_path' => $uploadedFileName]);
+            }
         }
         $result = $this->repo->store($request);
         if($result){
             if($this->model == 'App\Member'){
-                event(new FormSubmitEvent($request->only('id_number')));
+                event(new FormSubmitEvent($result));
             }
             Toastr::success('Data created Successfully!');
             return back();
@@ -104,10 +112,16 @@ class BaseController extends Controller
         if($validator->fails()){
             return $validator->errors();
         }
-
         if($request->hasFile('file')){
-            $uploadedFileName = $this->uploadFile($request);
-            $request->request->add(['file_path' => $uploadedFileName]);
+            if(is_array($request->file('file'))){
+                foreach($request->file('file') as $file){
+                    $fileName = $this->uploadFile($request, $file);
+                    Document::create(['file_path'=> $fileName, 'member_id'=> $request->id_number]);
+                }
+            }else{
+                $uploadedFileName = $this->uploadFile($request, $request->file);
+                $request->request->add(['file_path' => $uploadedFileName]);
+            }
         }
 
         $result = $this->repo->update($request, $id);
@@ -136,14 +150,15 @@ class BaseController extends Controller
         return 'an error occured!';
     }
 
-    protected function uploadFile(Request $request){
-        if($request->file('file')){
-            $file = $request->file('file');
+    protected function uploadFile(Request $request, $uploadedFile){
+        // if($request->file('file')){
+            // $file = $request->file('file');
+            $file = $uploadedFile;
             $fileExtension = $file->getClientOriginalExtension();
             $fileName = uniqid().'.'.$fileExtension;
             Storage::disk('local')->putFileAs('public',$file, $fileName);
             return $fileName;
-        }
+        //}
     }
 
     public function formatErrors($messages){

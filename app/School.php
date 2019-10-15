@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\User;
 use App\Atoll;
 use App\Island;
 use App\Member;
@@ -43,5 +44,9 @@ class School extends Model
 
     public function members(){
         return $this->hasMany(Member::class);
+    }
+
+    public function user(){
+        return $this->hasOne(User::class);
     }
 }

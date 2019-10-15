@@ -12,7 +12,7 @@ class BaseRepo
     protected $model;
     protected $with;
     protected $result;
-
+    protected $where;
 
     /**
      * Display a listing of the resource.
@@ -21,14 +21,13 @@ class BaseRepo
      */
     public function index($request)
     {
-
         Cache::remember($this->model.'index', 10, function () {
             $this->result = $this->model::with($this->with);
             if(\Illuminate\Support\Facades\Request::query()){
-           foreach(\Illuminate\Support\Facades\Request::query() as $key=>$value){
-               $this->result->where($key,'=',$value);
-           }
-        }
+                foreach(\Illuminate\Support\Facades\Request::query() as $key=>$value){
+                    $this->result->where($key,'=',$value);
+                }
+            }
         });
 
         return $this->result->get();
@@ -87,7 +86,10 @@ class BaseRepo
      */
     public function update(Request $request, $id)
     {
-        $data = $request->all();
+        // dd($request->all());
+        $data = array_filter($request->all(), function($value){
+            return $value != null;
+        });
         $record = $this->show($id);
         if(! $id){
             return false;

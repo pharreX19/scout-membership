@@ -131,6 +131,7 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
+            'alpha_spcae'=>'The :attribute must only contain letters and spaces'
         ],
     ],
 
@@ -146,7 +147,10 @@ return [
     */
 
     'attributes' => [
-        'atoll_id' => 'atoll'
+        'atoll_id' => 'atoll',
+        'island_id' => 'island',
+        'school_id' => 'school',
+        'rank_id' => 'rank'
     ],
 
 ];

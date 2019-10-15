@@ -29,10 +29,10 @@
                 <div class="x_content">
                   <br />
                   @if(isset($member))
-                  <form class="form-horizontal form-label-left input_mask" action="{{url('/members/'.$member->id)}}" method="POST">
+                  <form class="form-horizontal form-label-left input_mask" enctype="multipart/form-data" action="{{url('/members/'.$member->id)}}" method="POST">
                     @method('PUT')
                   @else
-                  <form class="form-horizontal form-label-left input_mask" action="{{url('/members')}}" method="POST">
+                  <form class="form-horizontal form-label-left input_mask" enctype="multipart/form-data" action="{{url('/members')}}" method="POST">
                   @endif
                     @csrf
                     <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
@@ -85,15 +85,15 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Atoll</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
                               <select class="form-control" name="atoll_id" id="atolls" onchange="populateIslands()">
-                                <option value="0">Choose option</option>
+                                <option value="0">Choose Atoll</option>
                               </select>
                             </div>
                     </div>
                     <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Select</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Island</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
                               <select class="form-control" name="island_id" id="islands" onchange="populateSchools()">
-                                <option value="0">Choose option</option>
+                                <option value="0">Choose Island</option>
                               </select>
                             </div>
                     </div>
@@ -101,10 +101,28 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">School</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
                               <select class="form-control" name="school_id" id="schools">
-                                <option value="0">Choose option</option>
+                                <option value="0">Choose School</option>
                               </select>
                             </div>
                     </div>
+
+                    <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Rank</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <select class="form-control" name="rank_id" id="ranks">
+                                <option value="0">Choose Rank</option>
+                              </select>
+                            </div>
+                    </div>
+
+                    <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Documents</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input accept=".pdf" multiple type="file" name="file[]" class="form-control">
+                            </div>
+                    </div>
+
+                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                     <div class="ln_solid"></div>
                     <div class="form-group">
                       <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
@@ -127,6 +145,7 @@
     var island_id = {{ $member->island_id  ?? 'null' }} ;
     var atoll_id =  {{ $member->atoll_id  ?? 'null' }} ;
     var school_id = {{ $member->school_id  ?? 'null' }};
+    var rank_id = {{ $member->rank_id  ?? 'null' }};
     function goBack(){
         history.back();
     }
@@ -147,11 +166,12 @@
 
     $(document).ready(function(){
         getData('/atolls', '#atolls', atoll_id);
+        getData('/ranks', '#ranks',rank_id);
         if(atoll_id){
             getData('/islands?atoll_id='+atoll_id, '#islands',island_id);
             getData('/schools?island_id='+island_id, '#schools',school_id);
         }
-        $('#atolls, #islands, #schools').select2();
+        $('#atolls, #islands, #schools,#ranks').select2();
 
     });
 </script>

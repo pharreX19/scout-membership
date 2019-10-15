@@ -23,9 +23,9 @@
                                         <label>Approve?</label>
                                             <p>
                                                 Yes:
-                                                <input type="radio" class="flat" name="is_approved" id="approvedT" value="1"/>
+                                                <input type="radio" class="flat" name="is_approved" id="approvedT" value='1'>
                                                 &nbsp;No:
-                                                <input type="radio" class="flat" name="is_approved" id="approvedF" value="0"/>
+                                                <input type="radio" class="flat" name="is_approved" id="approvedF" value='0'>
                                             </p>
                                     </div>
                                 </div>
