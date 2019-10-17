@@ -70,11 +70,13 @@
                         @if($member->is_approved)
                         <button disabled type="button" class="btn btn-success btn-xs">
                         <i class="fa fa-check">&nbsp;</i> </button>
-                        <button type="button" class="btn btn-info btn-xs">
-                        <i class="fa fa-download">&nbsp;</i> </button>
                         @else
                         <button disabled type="button" class="btn btn-danger btn-xs">
                         <i class="fa fa-times"></i>&nbsp;</button>
+                        @endif
+                        @if(count($member->documents) > 0)
+                        <button style="color:#fff" type="button" class="btn btn-info btn-xs">
+                        <a style="color:#fff" href="{{ url('download-documents/'.$member->id) }}"><i class="fa fa-download"></i></a></button>
                         @endif
                         <button type="button" class="btn btn-primary btn-xs">
                         <i class="fa fa-user"></i>&nbsp;<a style="color:#fff" href="{{ url('members/'.$member->id.'/edit') }}">Edit Profile</a>

@@ -23,9 +23,14 @@
     <!-- Custom Theme Style -->
     <link href="{{ asset('build/css/custom.css') }}" rel="stylesheet">
     @toastr_css
+    <style>
+        section {
+
+        }
+    </style>
   </head>
 
-  <body>
+  <body style=" background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);">
         <script src="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
     <section>
         <div class="page-content--bge5">

@@ -30,8 +30,14 @@ class UserDataTable extends DataTable
                 <a href="#" data-toggle="modal" data-info="'.$row->id.'"data-target="#deleteModal" class="fa fa-trash fa-lg"></a>';
                 return $btn;
             })
+            ->addColumn('school_id', function($row){
+                return $row->school->name;
+            })
             ->addColumn('role_id', function($row){
                 return $row->role->name;
+            })
+            ->addColumn('is_approved', function($row){
+                return $row->is_approved ? "Yes" : "No";
             });
     ;}
 
@@ -82,7 +88,7 @@ class UserDataTable extends DataTable
             Column::make('last_name'),
             Column::make('email'),
             Column::make('role_id'),
-            Column::make('created_at'),
+            Column::make('school_id'),
             Column::make('updated_at'),
             Column::make('is_approved'),
             Column::computed('action')

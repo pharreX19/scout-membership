@@ -29,11 +29,11 @@ class MemberRepo extends BaseRepo
             }
         });
 
-        return $this->result->paginate(20);
+        return $this->result->latest()->paginate(20);
     }
 
     public function getPendingMemberPayments(){
-        return  $this->model::with($this->with)->where('is_approved','=',0)->paginate(10);
+        return  $this->model::with($this->with)->where('is_approved','=',0)->latest()->paginate(10);
     }
 
     public function searchPending(Request $request){
@@ -43,6 +43,10 @@ class MemberRepo extends BaseRepo
             $pendingPayments->appends(array('query' => $request->input('query')));
             return $pendingPayments;
         }
+    }
+
+    public function updatePending($pendingPayments){
+        return $this->model::whereIn('id_number',$pendingPayments)->update(['is_approved' => 1]);
     }
 
     public function readNotification($id){

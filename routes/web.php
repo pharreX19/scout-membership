@@ -15,10 +15,23 @@ Route::view('tables','tables');
 
 Route::view('/login', 'login')->name('login');
 
-// Route::post('/users','UserController@store');
 Route::post('login', 'AuthController@login');
 
 Route::group(['middleware'=>'auth'], function(){
+
+    Route::get('/members-payments','MemberController@memberPayments');
+    Route::any('/search-pending/{query?}', 'MemberController@searchPending');
+    Route::post('/members/update-pending', 'MemberController@updatePending');
+
+    Route::get('download-documents/{id}', 'MemberController@download');
+
+    // Route::get('read-notification/{id}', 'MemberController@readNotification');
+
+    Route::view('/notifications', 'notifications');
+    Route::get('logout', 'AuthController@logout');
+
+    Route::get('/', 'DashboardController@index');
+
     Route::view('/register','register');
 
     Route::resource('ranks', 'RankController');
@@ -29,17 +42,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::resource('islands', 'IslandController');
     Route::resource('roles', 'RoleController');
 
-    Route::get('/members-payments','MemberController@memberPayments');
-
-    Route::any('/search-pending/{query?}', 'MemberController@searchPending');
-
-    Route::get('read-notification/{id}', 'MemberController@readNotification');
-    Route::view('/notifications', 'notifications');
-    Route::get('logout', 'AuthController@logout');
-
     Route::view('profile','profile');
-
-    Route::get('/', 'DashboardController@index');
 });
 
 

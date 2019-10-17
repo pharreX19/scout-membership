@@ -6,6 +6,7 @@ use App\Document;
 use Illuminate\Http\Request;
 use App\Events\FormSubmitEvent;
 use Yoeunes\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,7 +23,9 @@ class BaseController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->repo->index($request);
+        if(Gate::allows('is-user')){
+            return $this->repo->index($request);
+        }
     }
 
     /**
@@ -43,32 +46,37 @@ class BaseController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $validator = Validator::make($data, $this->model::$rules);
-        if($validator->fails()){
-            $this->formatErrors($validator->errors());
-            return back()->withInput();
-        }
-        if($request->hasFile('file')){
-            if(is_array($request->file('file'))){
-                foreach($request->file('file') as $file){
-                    $fileName = $this->uploadFile($request, $file);
-                    Document::create(['file_path'=> $fileName, 'member_id'=> $request->id_number]);
+        if(Gate::allows('is-user')){
+            $data = $request->all();
+            dd($data);
+            $validator = Validator::make($data, $this->model::$rules);
+            if($validator->fails()){
+                $this->formatErrors($validator->errors());
+                return back()->withInput();
+            }
+            if($request->hasFile('file')){
+                if(is_array($request->file('file'))){
+                    foreach($request->file('file') as $file){
+                        $fileName = $this->uploadFile($file);
+                        Document::create(['file_path'=> $fileName, 'member_id'=> $request->id_number]);
+                    }
+                }else{
+                    $uploadedFileName = $this->uploadFile($request->file('file'));
+                    $request->request->add(['file_path' => $uploadedFileName]);
                 }
-            }else{
-                $uploadedFileName = $this->uploadFile($request, $request->file('file'));
-                $request->request->add(['file_path' => $uploadedFileName]);
             }
-        }
-        $result = $this->repo->store($request);
-        if($result){
-            if($this->model == 'App\Member'){
-                event(new FormSubmitEvent($result));
+            $result = $this->repo->store($request);
+            if($result){
+                // if($this->model == 'App\Member'){
+                //     event(new FormSubmitEvent($result));
+                // }
+                Toastr::success('Data created Successfully!');
+                return back();
             }
-            Toastr::success('Data created Successfully!');
-            return back();
+            return 'Error occured!';
+        }else{
+            return view('403');
         }
-        return 'Error occured!';
     }
 
     /**
@@ -79,11 +87,15 @@ class BaseController extends Controller
      */
     public function show($id)
     {
-        $result = $this->repo->show($id);
+        if(Gate::allows('is-user')){
+            $result = $this->repo->show($id);
         if($result){
             return $result;
         }
         return 'No such record found!';
+        }else{
+            return view('403');
+        }
     }
 
     /**
@@ -106,7 +118,8 @@ class BaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->all();
+        if(Gate::allows('is-user')){
+            $data = $request->all();
         // dd($data);
         $validator = Validator::make($data, $this->model::$updateRules);
         if($validator->fails()){
@@ -115,11 +128,11 @@ class BaseController extends Controller
         if($request->hasFile('file')){
             if(is_array($request->file('file'))){
                 foreach($request->file('file') as $file){
-                    $fileName = $this->uploadFile($request, $file);
+                    $fileName = $this->uploadFile($file);
                     Document::create(['file_path'=> $fileName, 'member_id'=> $request->id_number]);
                 }
             }else{
-                $uploadedFileName = $this->uploadFile($request, $request->file);
+                $uploadedFileName = $this->uploadFile($request->file);
                 $request->request->add(['file_path' => $uploadedFileName]);
             }
         }
@@ -132,6 +145,11 @@ class BaseController extends Controller
         }
         return back();
 
+    }else{
+        return view('403');
+    }
+
+
     }
 
     /**
@@ -142,15 +160,20 @@ class BaseController extends Controller
      */
     public function destroy($id)
     {
-        $result = $this->repo->destroy($id);
-        if($result){
-           Toastr::info('record deleted successfully');
-           return back();
+        if(Gate::allows('is-admin')){
+            $result = $this->repo->destroy($id);
+            if($result){
+               Toastr::info('record deleted successfully');
+               return back();
+            }
+            return 'an error occured!';
+        }else{
+            return view('403');
         }
-        return 'an error occured!';
+
     }
 
-    protected function uploadFile(Request $request, $uploadedFile){
+    protected function uploadFile($uploadedFile){
         // if($request->file('file')){
             // $file = $request->file('file');
             $file = $uploadedFile;

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\UserRepo;
 use App\DataTables\UserDataTable;
 use Yoeunes\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,32 +20,38 @@ class UserController extends BaseController
     }
 
     public function index(Request $request){
-        $dataTable = new UserDataTable();
-        return $dataTable->render('users');
+        if(Gate::allows('is-admin')){
+            $dataTable = new UserDataTable();
+            return $dataTable->render('users');
+        }else{
+            return view('403');
+        }
+
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request){
+        if(Gate::allows('is-admin')){
+            $data = $request->all();
+            $validator = Validator::make($data, $this->model::$rules);
+            if($validator->fails()){
+                $this->formatErrors($validator->errors());
+                return back();
+            }
+            if($request->hasFile('file')){
+                $uploadedFileName = $this->uploadFile($request);
+                $request->request->add(['file_path' => $uploadedFileName]);
+            }
 
-        $data = $request->all();
-        $validator = Validator::make($data, $this->model::$rules);
-        if($validator->fails()){
-            $this->formatErrors($validator->errors());
-            return back();
-        }
-        if($request->hasFile('file')){
+            $result = $this->repo->store($request);
+            if($result){
+                Toastr::success('User Created Success! Please login');
+                return redirect()->to('/login');
+            }
+            return 'Error occured!';
 
-            $uploadedFileName = $this->uploadFile($request);
-            $request->request->add(['file_path' => $uploadedFileName]);
+        }else{
+            return view('403');
         }
-
-        $result = $this->repo->store($request);
-        if($result){
-            Toastr::success('User Created Success! Please login');
-            return redirect()->to('/login');
-        }
-        return 'Error occured!';
     }
-
 
 }

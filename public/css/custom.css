@@ -9,3 +9,17 @@
 div.dataTables_wrapper div.dataTables_processing {
     display: none !important;
 }
+
+.logo {
+    width: 20% !important;
+    margin-top: 0px !important;
+    margin-right: 12px !important;
+}
+
+@media screen and (max-width:768px){
+    .logo {
+        width: 60% !important;
+        margin-top: 0px !important;
+        margin-left: 6px !important;
+    }
+}

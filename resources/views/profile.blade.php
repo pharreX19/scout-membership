@@ -47,7 +47,7 @@
                       <br />
                         <input type="file" style="display:none" name="file" id="profile">
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-md-6 ml-auto col-sm-6 col-xs-12">
                       <div class="profile_title">
                         <div class="col-md-5">
                           <h2>Update password</h2>

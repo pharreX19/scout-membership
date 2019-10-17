@@ -28,7 +28,7 @@
                 </div>
                 <div class="x_content">
                   <br />
-                  <form class="form-horizontal form-label-left input_mask" action="{{url('/users')}}" method="POST">
+                  <form class="form-horizontal form-label-left input_mask" action="{{url('/users')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                     <input type="text" name="first_name" class="form-control has-feedback-left" id="inputSuccess2" placeholder="First Name">

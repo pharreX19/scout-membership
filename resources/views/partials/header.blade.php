@@ -27,7 +27,7 @@
                   <li><a href="{{ url('/logout')}}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                 </ul>
               </li>
-              @if(count(Auth::user()->unreadNotifications)>0)
+              {{-- @if(count(Auth::user()->unreadNotifications)>0)
               <li role="presentation" class="dropdown">
                 <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                   <i class="fa fa-envelope-o"></i>
@@ -37,7 +37,7 @@
                     @foreach(Auth::user()->unreadNotifications as $notification)
                   <li>
                     <a onclick="readNotification('{{ $notification->id }}')">
-                      {{-- <span class="image"><img src="{{ asset ('storage/'.\Auth::user()->file_path) }}" alt="Profile Image" /></span> --}}
+                      <span class="image"><img src="{{ asset ('storage/'.\Auth::user()->file_path) }}" alt="Profile Image" /></span>
                       <span>
                       <span>ID-Number: {{ $notification->data['form_number'] }}</span>
                       <span class="time">{{ $notification->created_at->format('d-m-Y') }}</span>
@@ -66,14 +66,14 @@
 
                 </ul>
               </li>
-              @endif
+              @endif --}}
             </ul>
           </nav>
         </div>
       </div>
 
 
-      <script>
+      {{-- <script>
           function readNotification(id){
               console.log(id);
               $.ajax({
@@ -85,4 +85,4 @@
                   }
               })
           }
-      </script>
+      </script> --}}

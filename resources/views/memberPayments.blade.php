@@ -21,9 +21,9 @@
                     </form>
               </div>
             @else
-                <button type="button" class="btn btn-round btn-default pull-right" onclick="goBack()">Back</button>
+            <button type="button" class="btn btn-round btn-default pull-right" onclick="goBack()">Back</button>
             @endif
-            <button type="button" class="btn btn-round btn-success pull-right" onclick="selectPendingPayment()">Update</button>
+            <button type="button" class="btn btn-round btn-success pull-right" style="display: none" onclick="updatePendingPayment()">Update</button>
 
         </div>
           </div>
@@ -67,7 +67,7 @@
                           @foreach($pendingPayments as $pendingPayment)
                         <tr id="{{ $pendingPayment->id_number }}" class="pending-payment">
                                 <td>
-                                  <input type="checkbox" class="flat" name="table_records">
+                                  <input type="checkbox" class="flat" name="table_records" onchange="selected()">
                                 </td>
                                 <td class=" ">{{ $pendingPayment->id_number }}</td>
                                 <td class=" ">{{ $pendingPayment->first_name }}&nbsp;{{ $pendingPayment->last_name }}</td>
@@ -109,16 +109,36 @@
     function goBack(){
         history.back();
     }
-    console.log($('.checked'));
 
-    $('icheckbox_flat-green').click(function(){
-        console.log('hello world');
+    var pendingPayments = {!! json_encode($pendingPayments) !!};
+    var pendingIds = [];
+
+    $('table input').on('ifChecked', function () {
+        var tr = $(this).parentsUntil('tbody')[2];
+        $('.btn-success').css('display','block');
+        pendingIds.push(tr.getAttribute('id'));
+    });
+
+    $('table input').on('ifUnchecked', function () {
+        $('.btn-success').css('display','none');
+    });
+
+
+    function updatePendingPayment(){
+        $.ajax({
+            url : 'members/update-pending?_token={{ csrf_token() }}',
+            data : {data : pendingIds},
+            method: 'POST',
+            success : function(res){
+                var rows = $('tbody tr');
+                for(var i=0; i<rows.length; i++){
+                    if(jQuery.inArray(rows[i].getAttribute('id'), pendingIds) !== -1){
+                        rows[i].remove();
+                    }
+                }
+        }
     })
-        var selectedRecords = $('.checked').parent().parent().attr('id');
-        console.log(selectedRecords);
-
-
-
+}
 
     $.ajax({
         url: '/roles',
