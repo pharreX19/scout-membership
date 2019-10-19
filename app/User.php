@@ -32,7 +32,7 @@ class User extends Authenticatable
         'password',
         'role_id',
         'file_path',
-        'is_approved'
+        // 'is_approved'
     ];
 
     /**
@@ -51,7 +51,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'is_approved' => 'boolean'
+        // 'is_approved' => 'boolean'
     ];
     protected $date = [
         'deleted_at'
@@ -67,13 +67,23 @@ class User extends Authenticatable
         'email' => 'required|email|max:20',
         'password' => 'required|string|max:30|confirmed',
         'role_id' => 'numeric|exists:roles,id',
-        'file' => 'nullable|mimes:image,jpg,jpeg,png|max:2048',
+        'profile' => 'nullable|mimes:image,jpg,jpeg,png|max:2048',
         'file_path' => 'nullable|string',
 
     ];
 
     public static $updateRules = [
-
+        'first_name' => 'sometimes|alpha_space|max:20',
+        'last_name' => 'sometimes|alpha_space|max:20',
+        'contact'=> 'numeric|nullable|digits:7',
+        'atoll_id' => 'sometimes|numeric|exists:atolls,id',
+        'island_id' => 'sometimes|numeric|exists:islands,id',
+        'school_id' => 'sometimes|numeric|exists:schools,id',
+        'email' => 'sometimes|email|max:20',
+        'password' => 'sometimes|string|max:30|confirmed',
+        'role_id' => 'numeric|exists:roles,id',
+        'profile' => 'nullable|mimes:image,jpg,jpeg,png|max:2048',
+        'file_path' => 'nullable|string',
     ];
 
     public function getAdmin(){

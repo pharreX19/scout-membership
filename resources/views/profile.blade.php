@@ -26,7 +26,7 @@
                           @if(Auth::user()->file_path)
                         <img style="cursor:pointer" id="profile-image" class="img-responsive avatar-view" src="{{ asset('storage/'.Auth::user()->file_path) }}" alt="Avatar" title="Change the avatar">
                             @else
-                            <img style="cursor:pointer" id="profile-image" class="img-responsive avatar-view" src="{{ asset('build/images/img.jpg') }}" alt="Avatar" title="Change the avatar">
+                            {{-- <img style="cursor:pointer" id="profile-image" class="img-responsive avatar-view" src="{{ asset('build/images/img.jpg') }}" alt="Avatar" title="Change the avatar"> --}}
                             @endif
                         </div>
                       </div>
@@ -65,6 +65,10 @@
                                 <label for="name" id="island-name" class="control-label mb-1">New Password</label>
                                 <input id="new-password" name="password" type="password" class="form-control" aria-required="true" aria-invalid="false">
                             </div>
+                            <div class="form-group">
+                                    <label for="name" id="island-name" class="control-label mb-1">Confirm Password</label>
+                                    <input id="new-password" name="password_confirmation" type="password" class="form-control" aria-required="true" aria-invalid="false">
+                                </div>
                             <div >
                                 <button id="payment-button" type="submit" class="btn btn-md btn-info btn-block">
                                     <i class="fa fa-edit"></i>&nbsp;
@@ -87,10 +91,11 @@
 
             $('#profile').change(function(){
                 var formData = new FormData();
-                var file = document.getElementById('profile').files[0]; //$('#profile').file
+                var file = document.getElementById('profile').files[0];
+                //$('#profile').file
                 // formData.append("file",file);
-                formData.append('file',file);
                 // formData.append("_token",$('meta[name=csrf-token]');
+                formData.append('profile',file);
 
                 $.ajax({
                     url: '/users/'+{{ Auth::user()->id }}+'?_method=PUT&_token={{ csrf_token() }}',
@@ -100,6 +105,7 @@
                     processData: false,
                     contentType:false,
                     success: function(res){
+                        // console.log(res);
                        location.reload();
                     }
                 })

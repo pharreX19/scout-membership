@@ -21,24 +21,12 @@ class MemberDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-
-            ->addColumn('action', function($row){
-                $btn = '<a href="/members/'.$row->id.'/edit" class="fa fa-edit fa-lg"></a>
-                        &nbsp;<a href="#" data-info="'.$row.'" data-target="#memberProfileModal" data-toggle="modal" class="fa fa-eye fa-lg"></a>
-                        &nbsp;<a href="#" data-info="'.$row->id.'" data-target="#deleteModal" data-toggle="modal" class="fa fa-trash fa-lg"></a>';
-                return $btn;
-            })
             ->addColumn('school_id', function($row){
                 return $row->school->name;
             })
-            ->addColumn('checkmark', function($row){
-                return '<div class="icheckbox_flat-green" style="position: relative;">
-                <input type="checkbox" class="flat" name="table_records" style="position: absolute; opacity: 0;">
-                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                </div>';
-             })
-            ->rawColumns(['checkmark'],true);
-
+            ->addColumn('rank_id',function($row){
+                return $row->rank->name;
+            });
     }
 
     /**
@@ -49,13 +37,7 @@ class MemberDataTable extends DataTable
      */
     public function query(Member $model)
     {
-        // return $model->newQuery();
-        $query = $model->newQuery()->select('id','first_name', 'last_name','id_number','school_id','joined_date');
-
-        if(auth()->user()->role_id != 1){
-            $query->where('school_id','=',auth()->user()->school_id);
-        }
-        return $query->where('is_approved','=','0');
+        return $model->newQuery();
     }
 
     /**
@@ -67,7 +49,7 @@ class MemberDataTable extends DataTable
     {
         return $this->builder()
                     //->setTableId('datatable-buttons')
-                    ->setTableAttribute('class','table table-striped jambo_table bulk_action')//'table table-striped table-bordered')
+                    ->setTableAttribute('class','table table-striped table-bordered')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('lBfrtip')
@@ -89,27 +71,19 @@ class MemberDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('checkmark')
-                    ->exportable(false)
-                    ->printable(false)
-                    ->width(100),
-            Column::make('first_name')
-                    ->addClass('column-title'),
-            Column::make('last_name')
-                    ->addClass('column-title'),
-            Column::make('id_number')
-                    ->addClass('column-title'),
-            // Column::make('contact'),
-            // Column::make('email'),
-            Column::make('school_id')
-                    ->addClass('column-title'),
+            Column::make('first_name'),
+            Column::make('last_name'),
+            Column::make('id_number'),
+            Column::make('contact'),
+            Column::make('email'),
+            Column::make('school_id'),
+            Column::make('rank_id'),
             Column::make('joined_date')
-                    ->addClass('column-title'),
-            Column::computed('action')
-                    ->addClass('column-title no-link last')
-                    ->exportable(false)
-                    ->printable(false)
-                    ->width(100)
+            // Column::computed('action')
+            //         ->addClass('column-title no-link last')
+            //         ->exportable(false)
+            //         ->printable(false)
+            //         ->width(100)
                     // ->addClass('text-center'),
         ];
     }

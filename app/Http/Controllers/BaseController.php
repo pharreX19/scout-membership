@@ -48,20 +48,21 @@ class BaseController extends Controller
     {
         if(Gate::allows('is-user')){
             $data = $request->all();
-            dd($data);
             $validator = Validator::make($data, $this->model::$rules);
             if($validator->fails()){
                 $this->formatErrors($validator->errors());
                 return back()->withInput();
             }
-            if($request->hasFile('file')){
+            if($request->hasFile('file') || $request->hasFile('profile')){
                 if(is_array($request->file('file'))){
                     foreach($request->file('file') as $file){
+                        // dd($file);
                         $fileName = $this->uploadFile($file);
                         Document::create(['file_path'=> $fileName, 'member_id'=> $request->id_number]);
                     }
-                }else{
-                    $uploadedFileName = $this->uploadFile($request->file('file'));
+                }if($request->file('profile')){
+
+                    $uploadedFileName = $this->uploadFile($request->file('profile'));
                     $request->request->add(['file_path' => $uploadedFileName]);
                 }
             }
@@ -118,36 +119,40 @@ class BaseController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         if(Gate::allows('is-user')){
-            $data = $request->all();
-        // dd($data);
-        $validator = Validator::make($data, $this->model::$updateRules);
-        if($validator->fails()){
-            return $validator->errors();
-        }
-        if($request->hasFile('file')){
-            if(is_array($request->file('file'))){
-                foreach($request->file('file') as $file){
-                    $fileName = $this->uploadFile($file);
-                    Document::create(['file_path'=> $fileName, 'member_id'=> $request->id_number]);
+                $data = array_filter($request->all());
+                $validator = Validator::make($data, $this->model::$updateRules);
+                if($validator->fails()){
+                    $this->formatErrors($validator->errors());
+                    return back()->withInput();
                 }
-            }else{
-                $uploadedFileName = $this->uploadFile($request->file);
-                $request->request->add(['file_path' => $uploadedFileName]);
-            }
-        }
+                if($request->hasFile('file') || $request->hasFile('profile')){
+                    if(is_array($request->file('file'))){
+                        // return 'file found';
+                        foreach($request->file('file') as $file){
+                            $fileName = $this->uploadFile($file);
+                            Document::create(['file_path'=> $fileName, 'member_id'=> $request->id_number]);
+                        }
+                    }if($request->file('profile')){
+                        $uploadedFileName = $this->uploadFile($request->file('profile'));
+                        $request->request->add(['file_path' => $uploadedFileName]);
+                    }
+                }
 
-        $result = $this->repo->update($request, $id);
-        if($result){
-            Toastr::success('Data updated successfully!');
+                $result = $this->repo->update($request, $id);
+                if($result){
+                    Toastr::success('Data updated successfully!');
+                }else{
+                    Toastr::error('Error occured!');
+                }
+                return back();
+
+
+
         }else{
-            Toastr::error('Error occured!');
+            return view('403');
         }
-        return back();
-
-    }else{
-        return view('403');
-    }
 
 
     }
@@ -163,7 +168,7 @@ class BaseController extends Controller
         if(Gate::allows('is-admin')){
             $result = $this->repo->destroy($id);
             if($result){
-               Toastr::info('record deleted successfully');
+               Toastr::success('record deleted successfully');
                return back();
             }
             return 'an error occured!';
@@ -176,6 +181,7 @@ class BaseController extends Controller
     protected function uploadFile($uploadedFile){
         // if($request->file('file')){
             // $file = $request->file('file');
+            // $file = $request->file('profile');
             $file = $uploadedFile;
             $fileExtension = $file->getClientOriginalExtension();
             $fileName = uniqid().'.'.$fileExtension;

@@ -4,11 +4,11 @@
         <div class="">
           <div class="page-title">
             <div class="title_left">
+                @if(isset($pendingPayments))
               <h3>Payments</h3>
             </div>
 
             <div class="title_right">
-
                 @if(count(Request::query()) == 0 )
               <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                 <form action="{{ url('/search-pending') }}" role="search">
@@ -37,11 +37,11 @@
                   </div>
 
                   <div class="x_content">
-
-                    <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>
+                    @if(count($pendingPayments))
+                    <p>List of Members, whose <code>payments are pending</code> is listed below</p>
 
                     <div class="table-responsive">
-                        @if(isset($pendingPayments))
+
                       <table class="table table-striped jambo_table bulk_action" id="members-table">
                         <thead>
                           <tr>
@@ -82,15 +82,18 @@
                         </tbody>
                       </table>
                       @else
-                      {{ $message }}
+                      {{ $message ?? 'No Pending Payments!' }}
                       @endif
                     </div>
                   </div>
                 </div>
               </div>
+              @endif
           </div>
         </div>
+        @if(count($pendingPayments)>0)
         {{ $pendingPayments->links() }}
+        @endif
 </div>
 
 
@@ -133,7 +136,8 @@
                 var rows = $('tbody tr');
                 for(var i=0; i<rows.length; i++){
                     if(jQuery.inArray(rows[i].getAttribute('id'), pendingIds) !== -1){
-                        rows[i].remove();
+                        window.location.href = "{{URL::to('members-payments')}}";
+
                     }
                 }
         }

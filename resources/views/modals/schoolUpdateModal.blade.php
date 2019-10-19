@@ -20,7 +20,7 @@
 
                             <div class="form-group" id="islands_select">
                                     <label for="island" id="island-name" class="control-label mb-1">Island</label>
-                                    <select disabled class="form-control" name="island_id" id="islands" onchange="populateSchools()">
+                                    <select  class="form-control" name="island_id" id="islands">
                                       <option value="0">Choose Island</option>
                                     </select>
                           </div>
@@ -49,7 +49,7 @@
         $('#schoolUpdateModal #islands option:gt(0)').remove();
         var selectedAtollId = $('#schoolUpdateModal #atolls').val();
         getData('/islands?atoll_id='+selectedAtollId, '#schoolUpdateModal #islands');
-        $('#schoolUpdateModal').find('#islands_select select').prop('disabled',false);
+        // $('#schoolUpdateModal').find('#islands_select select').prop('disabled',false);
     }
 
     function populateSchools(){

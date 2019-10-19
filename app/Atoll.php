@@ -21,7 +21,8 @@ class Atoll extends Model
     ];
 
     public static $rules = [
-        'name' => 'required|alpha_space|max:20:unique'
+
+        'name' => "required|alpha_space|max:20|unique:atolls,name"
     ];
 
     public static $updateRules = [

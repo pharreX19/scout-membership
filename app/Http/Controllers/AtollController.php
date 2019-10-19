@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Atoll;
 use App\Repositories\AtollRepo;
+use Yoeunes\Toastr\Facades\Toastr;
 use App\Http\Controllers\BaseController;
 
 class AtollController extends BaseController

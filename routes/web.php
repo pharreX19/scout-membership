@@ -11,7 +11,7 @@
 |
 */
 
-Route::view('tables','tables');
+Route::view('403','403');
 
 Route::view('/login', 'login')->name('login');
 
@@ -23,12 +23,17 @@ Route::group(['middleware'=>'auth'], function(){
     Route::any('/search-pending/{query?}', 'MemberController@searchPending');
     Route::post('/members/update-pending', 'MemberController@updatePending');
 
+    Route::any('/search-member/{query?}', 'MemberController@searchMember');
+
     Route::get('download-documents/{id}', 'MemberController@download');
 
     // Route::get('read-notification/{id}', 'MemberController@readNotification');
 
     Route::view('/notifications', 'notifications');
     Route::get('logout', 'AuthController@logout');
+
+    Route::get('print-members', 'MemberController@printMembers');
+
 
     Route::get('/', 'DashboardController@index');
 

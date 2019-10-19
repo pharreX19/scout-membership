@@ -36,9 +36,7 @@ class UserDataTable extends DataTable
             ->addColumn('role_id', function($row){
                 return $row->role->name;
             })
-            ->addColumn('is_approved', function($row){
-                return $row->is_approved ? "Yes" : "No";
-            });
+
     ;}
 
     /**
@@ -90,7 +88,6 @@ class UserDataTable extends DataTable
             Column::make('role_id'),
             Column::make('school_id'),
             Column::make('updated_at'),
-            Column::make('is_approved'),
             Column::computed('action')
             ->exportable(false)
             ->printable(false)

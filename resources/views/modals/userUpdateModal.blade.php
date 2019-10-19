@@ -17,7 +17,7 @@
                                       </select>
                             </div>
 
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <div id="is_approved" class="btn-group" data-toggle="buttons">
                                         <label>Approve?</label>
@@ -29,12 +29,15 @@
                                             </p>
                                     </div>
                                 </div>
-                            </div>
-                            <hr>
+                            </div> --}}
+                            {{-- <hr> --}}
                             <div class="form-group">
                                     <label for="name" id="password" class="control-label mb-1">Reset Password</label>
-                                    <input id="password" name="password" type="password" class="form-control" aria-required="true" placeholder="Reset Password" aria-invalid="false">
+                                    <input id="password" name="password" type="password" class="form-control" aria-required="true" onkeyup="setConfirmation(this.value)" placeholder="Reset Password" aria-invalid="false">
                             </div>
+
+                            <input id="password_confirmation" name="password_confirmation" type="hidden" class="form-control" aria-required="true">
+
 
 
                                     <button id="payment-button" type="submit" class="btn btn-md btn-info btn-block">
@@ -48,3 +51,10 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    function setConfirmation(val){
+        $('#password_confirmation').val(val);
+    }
+</script>

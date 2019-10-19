@@ -51,7 +51,7 @@ class BaseRepo
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $data = array_filter($request->all());
         return $this->model::create($data);
     }
 
@@ -63,6 +63,7 @@ class BaseRepo
      */
     public function show($id)
     {
+        // dd($this->model);
         return $this->model::find($id);
     }
 
@@ -87,7 +88,8 @@ class BaseRepo
     public function update(Request $request, $id)
     {
         // dd($request->all());
-        $data = array_filter($request->all(), function($value){
+        $data = array_filter($request->all());
+        $data = array_filter($data, function($value){
             return $value != null;
         });
         $record = $this->show($id);
@@ -106,9 +108,10 @@ class BaseRepo
     public function destroy($id)
     {
         $record = $this->show($id);
-        if(! $id){
-           return false;
+        // dd($record);
+        if($id){
+            return $record->delete();
         }
-        return $record->delete();
+        return false;
     }
 }

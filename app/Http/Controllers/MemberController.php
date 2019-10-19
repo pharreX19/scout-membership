@@ -35,18 +35,28 @@ class MemberController extends BaseController
 
     public function edit($id)
     {
-        $member = $this->repo->show($id);
+        // $member = $this->repo->show($id);
+        $member = parent::show($id);
         return view('newMembership')->with('member',$member);
     }
 
     public function update(Request $request,$id){
         if(Gate::allows('is-user')){
-            $this->model::$updateRules['email'] = $this->model::$updateRules['email'].','.$id;
+            $this->model::$updateRules['email'] = $this->model::$updateRules['email'].','.$id. 'deleted_at,NULL';
             return parent::update($request,$id);
         }else{
             return view('403');
         }
 
+    }
+
+    public function printMembers(){
+        if(Gate::allows('is-admin')){
+            $dataTable = new MemberDataTable();
+            return $dataTable->render('users');
+        }else{
+            return view('403');
+        }
     }
 
     public function memberPayments(){
@@ -62,10 +72,23 @@ class MemberController extends BaseController
             return back();
         }
         $pendingPayments = $this->repo->searchPending($request);
-        if (count($pendingPayments) > 0){
+        if ($pendingPayments){
              return view ('memberPayments', compact('pendingPayments'));
+        }else{
+
+            return view ('memberPayments')->with(['message'=>'No Details found. Try to search again !', 'pendingPayments'=> []]);
         }
-             return view ('memberPayments')->withMessage('No Details found. Try to search again !');
+    }
+
+    public function searchMember(Request $request){
+        if(Gate::allows('is-user')){
+            $members = $this->repo->searchMember($request);
+            if ($members){
+                return view ('members', compact('members'));
+           }else{
+               return view ('members')->with(['message'=>'No Members found. Try to search again !', 'members'=> []]);
+           }
+        }
     }
 
 
@@ -76,7 +99,7 @@ class MemberController extends BaseController
         $documents = $member->documents;
         $zipFileName = 'myzip.zip';
         $zip = new ZipArchive();
-        if ($zip->open($zipFileName, ZipArchive::CREATE ) === true ){
+        if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE ) === true ){
         foreach($documents as $document){
             $file_path = storage_path() . "/app/public/" . $document->file_path;
             $zip->addFile($file_path);
@@ -88,10 +111,10 @@ class MemberController extends BaseController
         $zip->close();
 
         return \Response::download($zipFileName, $zipFileName, $headers );
-        }else{
-            return view('403');
         }
 
+    }else{
+        return view('403');
     }
 }
 

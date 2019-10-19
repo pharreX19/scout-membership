@@ -4,19 +4,26 @@
     <div class="">
       <div class="page-title">
         <div class="title_left">
-          <h3>Registered Members</h3>
+            @if(isset($members))
+        <h3>Registered Members</h3>
         </div>
 
         <div class="title_right">
+            @if(count(Request::query()) == 0 )
           <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <form action="{{ url('/search-member') }}" role="search">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for..." onkeyup="searchMember(this.value)">
+              <input type="text" class="form-control" required name="query" placeholder="Search for...">
               <span class="input-group-btn">
-                <button class="btn btn-default" disabled type="button">Go!</button>
+                <button class="btn btn-default" type="submit">Go!</button>
               </span>
             </div>
+            </form>
           </div>
-        </div>
+          @else
+        <button type="button" class="btn btn-round btn-default pull-right" onclick="goBack()">Back</button>
+          @endif
+    </div>
       </div>
 
       <div class="clearfix"></div>
@@ -35,6 +42,7 @@
                 </div>
 
                 <div class="clearfix"></div>
+
                 @foreach($members as $member)
                 <div class="col-md-4 col-sm-4 col-xs-12 profile_details" id="{{ $member->id }}">
                   <div class="well profile_view">
@@ -51,13 +59,17 @@
                         </ul>
                       </div>
                       <div class="right col-xs-5 text-center">
+                        @if($member->file_path)
+                        <img src="{{ asset('/storage/'.$member->file_path) }}" alt="" class="img-circle img-responsive">
+                        @else
                         <img src="{{ asset('/build/images/img.jpg') }}" alt="" class="img-circle img-responsive">
-                      </div>
+                        @endif
+                    </div>
                     </div>
                     <div class="col-xs-12 bottom text-center">
-                      <div class="col-xs-12 col-sm-6 emphasis">
+                      <div class="col-xs-12 col-sm-5 emphasis">
                           <p class="ratings">
-                          <small>updated:&nbsp;{{ $member->updated_at->format('d-m-Y') }}</small>
+                          <small>Updated:&nbsp;{{ $member->updated_at->format('d-m-Y') }}</small>
                           {{-- <a>4.0</a>
                           <a href="#"><span class="fa fa-star"></span></a>
                           <a href="#"><span class="fa fa-star"></span></a>
@@ -66,12 +78,14 @@
                           <a href="#"><span class="fa fa-star-o"></span></a> --}}
                         </p>
                       </div>
-                      <div class="col-xs-12 col-sm-6 emphasis">
+                      <div class="col-xs-12 col-sm-7 emphasis">
                         @if($member->is_approved)
-                        <button disabled type="button" class="btn btn-success btn-xs">
+                        <button disabled type="button" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="top" title="approved">
                         <i class="fa fa-check">&nbsp;</i> </button>
-                        @else
-                        <button disabled type="button" class="btn btn-danger btn-xs">
+                        {{-- @else --}}
+                        @endif
+                        @if(\Auth::user()->role_id == 1)
+                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" data-info="{{$member->id}}">
                         <i class="fa fa-times"></i>&nbsp;</button>
                         @endif
                         @if(count($member->documents) > 0)
@@ -86,17 +100,29 @@
                   </div>
                 </div>
                 @endforeach
+                @else
+            <h4>{{ $message ?? 'No Members Registered' }}!</h4>
+                @endif
               </div>
             </div>
           </div>
         </div>
       </div>
+      @if(count($members)>0)
       {{ $members->links() }}
+      @endif
     </div>
   </div>
+
+  @include('../modals/deleteModal')
+
   {{-- @include('./modals/memberProfileModal') --}}
 
 <script type="text/javascript">
+    function goBack(){
+        history.back();
+    }
+
     function searchMember(value){
         var members = {!! json_encode($members) !!};
         members.data.forEach(member => {
@@ -115,6 +141,12 @@
             }
         });
     }
+
+    $('#deleteModal').on('show.bs.modal',function(e){
+            var id = e.relatedTarget.getAttribute('data-info');
+            $('#deleteModal form').attr('action','/members/'+id);
+        });
+
 
 </script>
         <!-- page content -->
@@ -143,10 +175,6 @@
     @include('../modals/memberProfileModal')
 
     <script>
-        $('#deleteModal').on('show.bs.modal',function(e){
-            var id = e.relatedTarget.getAttribute('data-info');
-            $('#deleteModal form').attr('action','/members/'+id);
-        });
 
         $('#memberProfileModal').on('show.bs.modal',function(e){
             console.log('opned')

@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Scout Membership| Scouts</title>
-  <link rel="stylesheet" href="{{ asset('css/theme.css')}}">
+  {{-- <link rel="stylesheet" href="{{ asset('css/theme.css')}}"> --}}
     <!-- Bootstrap -->
     {{-- <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
-    <link href="../css/theme.css" rel="stylesheet">
+    {{-- <link href="../css/theme.css" rel="stylesheet"> --}}
     @include('./partials/styles')
     <!-- Font Awesome -->
     {{-- <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet"> --}}
@@ -30,39 +30,46 @@
     </style>
   </head>
 
-  <body style=" background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);">
+  <body>
         <script src="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
     <section>
-        <div class="page-content--bge5">
-            <div class="container">
-                <div class="login-wrap">
-                    <div class="login-content">
-                        <div class="login-logo">
-                            <h3>Member Login</h3>
+        <div class="container h-100">
+            <div class="row justify-content-center" style="margin-top:10%">
+                <div class="col-md-offset-4 col-md-4 col-xs-offset-1 col-xs-10">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h3 class="text-center">Login</h3>
+                            {{-- <div class="clearfix"></div> --}}
                         </div>
-                        <div class="login-form">
-                            <form action="/login" method="post">
+                        <br>
+                            <form action="/login" method="POST" class="form-horizontal form-label-left input_mask"  style="padding:10px">
                                 @csrf
-                                <div class="form-group">
-                                    <label>Email Address</label>
-                                    <input class="au-input au-input--full" type="email" name="email" placeholder="Email">
+                                <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                    <input type="text" name="email" class="form-control has-feedback-left" id="inputSuccess2" placeholder="Email">
+                                    <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
                                 </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input class="au-input au-input--full" type="password" name="password" placeholder="Password">
-                                </div>
-                                <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">sign in</button>
-                                {{-- <p class="text-center">Don't Have an account?&nbsp;<a href="/register">Register</a></p> --}}
 
-                            </form>
-                        </div>
-                    </div>
+                                <div class="clearfix"></div>
+
+                                <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                    <input type="password" name="password" class="form-control has-feedback-left" id="inputSuccess4" placeholder="Password">
+                                    <span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                                <div class="clearfix"></div>
+
+                                <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                    <button type="submit" class="btn btn-success btn-block"><i class="fa fa-unlock-alt"></i>&nbsp;Login</button>
+                                </div>
+                          </form>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</div>
+
+</section>
     @include('./partials/scripts')
-  </body>
+</body>
   @toastr_js
   @toastr_render
 </html>

@@ -69,8 +69,8 @@
                                 <table class="table table-striped jambo_table bulk_action">
                                   <thead>
                                     <tr class="headings">
-                                      <th class="column-title">Atoll </th>
                                       <th class="column-title">Island </th>
+                                      <th class="column-title">Atoll </th>
                                       <th class="column-title no-link last"><span class="nobr">Action</span>
                                       </th>
                                     </tr>

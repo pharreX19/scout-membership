@@ -35,17 +35,18 @@ class UserController extends BaseController
             $validator = Validator::make($data, $this->model::$rules);
             if($validator->fails()){
                 $this->formatErrors($validator->errors());
-                return back();
+                return back()->withInput();
             }
-            if($request->hasFile('file')){
-                $uploadedFileName = $this->uploadFile($request);
+            if($request->hasFile('profile')){
+                $uploadedFileName = $this->uploadFile($request->file('profile'));
                 $request->request->add(['file_path' => $uploadedFileName]);
             }
 
-            $result = $this->repo->store($request);
+            // $result = $this->repo->store($request);
+            $result = parent::store($request);
             if($result){
-                Toastr::success('User Created Success! Please login');
-                return redirect()->to('/login');
+                // Toastr::success('User Created Success!');
+                return redirect()->back();
             }
             return 'Error occured!';
 

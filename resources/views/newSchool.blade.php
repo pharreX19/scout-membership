@@ -139,18 +139,18 @@
             getData('/atolls','#schoolUpdateModal #atolls');
             getData('/islands','#schoolUpdateModal #islands');
 
-            $(document).ajaxComplete(function(){
+            // $(document).ajaxComplete(function(){
                 $('#schoolUpdateModal').find('#atolls_select select').val(atoll_id);
                 $('#schoolUpdateModal').find('#islands_select select').val(island_id);
                 $('#schoolUpdateModal').find('#name').val(name);
 
-            })
+            // })
 
         })
 
         $('tbody').on('click','td#delete', function(){
             var id = $(this).attr('data-info');
-            $('#deleteModal').find('form').attr('action','/islands/'+id);
+            $('#deleteModal').find('form').attr('action','/schools/'+id);
        });
 
     });

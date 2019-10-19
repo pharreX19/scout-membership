@@ -116,6 +116,13 @@
                     </div>
 
                     <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input accept=".jpg,.png,.jpeg" multiple type="file" name="profile" class="form-control">
+                            </div>
+                    </div>
+
+                    <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Documents</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
                                 <input accept=".pdf" multiple type="file" name="file[]" class="form-control">

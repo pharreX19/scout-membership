@@ -55,9 +55,14 @@
                   <li><a href="{{ url('/schools/create')}}">Schools</a></li>
                   <li><a href="{{ url('/atolls/create')}}">Atolls</a></li>
                   <li><a href="{{ url('/islands/create')}}">Islands</a></li>
-                  <li><a href="{{ url('/users')}}">Users</a></li>
                   <li><a href="{{ url('/ranks/create')}}">Ranks</a></li>
                   <li><a href="{{ url('/register')}}">Register</a></li>
+                  <li class="inactive"><a>Lists<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav" style="display: block;">
+                    <li><a href="{{ url('/users')}}">Users</a></li>
+                    <li><a href="{{ url('/print-members')}}">Members</a></li>
+                    </ul>
+                  </li>
                   {{-- <li><a href="{{ url('/roles')}}">Roles</a></li> --}}
                     {{-- <li><a href="widgets.html">Widgets</a></li>
                     <li><a href="invoice.html">Invoice</a></li>

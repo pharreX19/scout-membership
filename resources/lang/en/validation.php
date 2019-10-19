@@ -116,6 +116,7 @@ return [
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute format is invalid.',
     'uuid' => 'The :attribute must be a valid UUID.',
+    'alpha_space'=>'The :attribute must only contain letters and spaces',
 
     /*
     |--------------------------------------------------------------------------
@@ -131,7 +132,7 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
-            'alpha_spcae'=>'The :attribute must only contain letters and spaces'
+
         ],
     ],
 
@@ -150,7 +151,9 @@ return [
         'atoll_id' => 'atoll',
         'island_id' => 'island',
         'school_id' => 'school',
-        'rank_id' => 'rank'
+        'rank_id' => 'rank',
+        'file.*' => 'document'
+
     ],
 
 ];

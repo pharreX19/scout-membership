@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Island;
 use Illuminate\Http\Request;
 use App\Repositories\IslandRepo;
+use Yoeunes\Toastr\Facades\Toastr;
 use App\Http\Controllers\BaseController;
 
 class IslandController extends BaseController

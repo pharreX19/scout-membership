@@ -23,11 +23,6 @@ class AuthController extends BaseController
         }
 
         if(\Auth::attempt($credentials)){
-            if(!\Auth::user()->is_approved){
-                \Auth::logout();
-                Toastr::info('Please contact your administrator to verify your login');
-                return redirect()->to('/login');
-            }
             return redirect('/');
         }else{
             Toastr::warning('Invalid Credentials');
