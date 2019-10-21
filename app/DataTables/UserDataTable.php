@@ -68,7 +68,7 @@ class UserDataTable extends DataTable
                     ->buttons(
                         Button::make('copy'),
                         Button::make('csv'),
-                        Button::make('print'),
+                        Button::make('print')
                         //Button::make('view'),
                         //Button::make('reload')
                     );

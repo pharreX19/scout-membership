@@ -57,7 +57,7 @@ class MemberDataTable extends DataTable
                     ->buttons(
                         Button::make('copy'),
                         Button::make('csv'),
-                        Button::make('print'),
+                        Button::make('print')
                         // Button::make('reset'),
                         // Button::make('reload')
                     );

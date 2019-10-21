@@ -61,7 +61,7 @@
                     <ul class="nav" style="display: block;">
                     <li><a href="{{ url('/users')}}">Users</a></li>
                     <li><a href="{{ url('/print-members')}}">Members</a></li>
-                    </ul>/
+                    </ul>
                   </li>
                   {{-- <li><a href="{{ url('/roles')}}">Roles</a></li> --}}
                     {{-- <li><a href="widgets.html">Widgets</a></li>
