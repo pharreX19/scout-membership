@@ -26,7 +26,7 @@
                           @if(Auth::user()->file_path)
                         <img style="cursor:pointer" id="profile-image" class="img-responsive avatar-view" src="{{ asset('storage/'.Auth::user()->file_path) }}" alt="Avatar" title="Change the avatar">
                             @else
-                            {{-- <img style="cursor:pointer" id="profile-image" class="img-responsive avatar-view" src="{{ asset('build/images/img.jpg') }}" alt="Avatar" title="Change the avatar"> --}}
+                             <img style="cursor:pointer" id="profile-image" class="img-responsive avatar-view" src="{{ asset('build/images/img.jpg') }}" alt="Avatar" title="Change the avatar">
                             @endif
                         </div>
                       </div>

@@ -42,7 +42,9 @@ class MemberController extends BaseController
 
     public function update(Request $request,$id){
         if(Gate::allows('is-user')){
-            $this->model::$updateRules['email'] = $this->model::$updateRules['email'].','.$id. 'deleted_at,NULL';
+            $this->model::$updateRules['email'] = $this->model::$updateRules['email'].','.$id. ',id,deleted_at,NULL';
+            $this->model::$updateRules['id_number'] = $this->model::$updateRules['id_number'].','.$id. ',id,deleted_at,NULL';
+
             return parent::update($request,$id);
         }else{
             return view('403');
