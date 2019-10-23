@@ -32,5 +32,20 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('is-user',function($user){
             return in_array($user->role_id, [1,2]);
         });
+
+        Gate::define('is-focal-point',function($user, $id){
+            if(\Auth::user()->role_id ==1 ){
+                return true;
+            }else{
+                foreach($user->members as $member){
+                    if($id == $member->id){
+                        return true;
+                        break;
+                    }
+                }
+                return false;
+            }
+
+        });
     }
 }

@@ -14,7 +14,7 @@ class MemberRepo extends BaseRepo
     public function __construct()
     {
         $this->model = Member::class;
-        $this->with=['atoll','island','school','documents'];
+        $this->with=['atoll','island','school','documents','user'];
     }
 
     public function index($request){
@@ -26,7 +26,7 @@ class MemberRepo extends BaseRepo
             //     }
             // }
             if(\Auth::user()->role_id != 1){
-                $this->result->where('school_id','=',auth()->user()->school_id);
+                $this->result->where('user_id','=',auth()->user()->id);
             }
         });
 

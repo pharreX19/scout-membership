@@ -35,13 +35,16 @@ class MemberController extends BaseController
 
     public function edit($id)
     {
-        // $member = $this->repo->show($id);
-        $member = parent::show($id);
-        return view('newMembership')->with('member',$member);
+        if(Gate::allows('is-focal-point',$id)){
+            $member = parent::show($id);
+            return view('newMembership')->with('member',$member);
+        }else{
+            return view('403');
+        }
     }
 
     public function update(Request $request,$id){
-        if(Gate::allows('is-user')){
+        if(Gate::allows('is-focal-point',$id)){
             $this->model::$updateRules['email'] = $this->model::$updateRules['email'].','.$id. ',id,deleted_at,NULL';
             $this->model::$updateRules['id_number'] = $this->model::$updateRules['id_number'].','.$id. ',id,deleted_at,NULL';
 
@@ -62,24 +65,34 @@ class MemberController extends BaseController
     }
 
     public function memberPayments(){
+        if(Gate::allows('is-admin')){
+            $pendingPayments = $this->repo->getPendingMemberPayments();
+            return view('memberPayments',compact('pendingPayments'));
+        }else{
+            return view('403');
+        }
         // return Datatables::of(Member::query())->addColumn('checkbox', function ($item) {
         //     return '<input type="checkbox" class="flat" name="table_records">';
         // })->rawColumns(['checkbox'])->make(true);
-            $pendingPayments = $this->repo->getPendingMemberPayments();
-            return view('memberPayments',compact('pendingPayments'));
+
     }
 
     public function searchPending(Request $request){
-        if(!$request->input('query')){
-            return back();
-        }
-        $pendingPayments = $this->repo->searchPending($request);
-        if ($pendingPayments){
-             return view ('memberPayments', compact('pendingPayments'));
-        }else{
+        if(Gate::allows('is-admin')){
+            if(!$request->input('query')){
+                return back();
+            }
+            $pendingPayments = $this->repo->searchPending($request);
+            if ($pendingPayments){
+                 return view ('memberPayments', compact('pendingPayments'));
+            }else{
 
-            return view ('memberPayments')->with(['message'=>'No Details found. Try to search again !', 'pendingPayments'=> []]);
+                return view ('memberPayments')->with(['message'=>'No Details found. Try to search again !', 'pendingPayments'=> []]);
+            }
+        }else{
+            return view('403');
         }
+
     }
 
     public function searchMember(Request $request){
@@ -95,7 +108,7 @@ class MemberController extends BaseController
 
 
     public function download($id){
-        if(Gate::allows('is-user')){
+        if(Gate::allows('is-focal-point',$id)){
         $documentsArray = [];
         $member = $this->repo->show($id);
         $documents = $member->documents;
