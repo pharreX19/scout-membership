@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Member;
 use ZipArchive;
 use App\Document;
@@ -41,6 +42,15 @@ class MemberController extends BaseController
         }else{
             return view('403');
         }
+    }
+
+    public function store(Request $request){
+        if(\Auth::user()->id == 1 ){
+            $user_id = User::where('school_id','=',$request->input('school_id'))->pluck('id')->first();
+            $request->request->add(['user_id'=>$user_id]);
+        }
+            return parent::store($request);
+
     }
 
     public function update(Request $request,$id){
@@ -103,6 +113,8 @@ class MemberController extends BaseController
            }else{
                return view ('members')->with(['message'=>'No Members found. Try to search again !', 'members'=> []]);
            }
+        }else{
+            return view('403');
         }
     }
 

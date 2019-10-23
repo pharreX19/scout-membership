@@ -127,7 +127,7 @@
 
 <script type="text/javascript">
     function goBack(){
-        history.back();
+        window.location.assign("{{ url('/members') }}");
     }
 
     function searchMember(value){
