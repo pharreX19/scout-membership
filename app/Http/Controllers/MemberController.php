@@ -45,9 +45,9 @@ class MemberController extends BaseController
     }
 
     public function store(Request $request){
-        if(\Auth::user()->id == 1 ){
-            $user_id = User::where('school_id','=',$request->input('school_id'))->pluck('id')->first();
-            $request->request->add(['user_id'=>$user_id]);
+        if(\Auth::user()->role_id == 1 ){
+            $user_id = User::where('school_id','=',$request->input('school_id'))->where('role_id','!=',1)->pluck('id')->first();
+            $request->request->add(['user_id'=> $user_id]);
         }
             return parent::store($request);
 
@@ -146,9 +146,14 @@ class MemberController extends BaseController
 }
 
     public function updatePending(Request $request){
-        $data = $request->all();
-        $filteredArray = array_filter($data['data']);
-        return $this->repo->updatePending($filteredArray);
+        if(Gate::allows('is-admin')){
+            $data = $request->all();
+            $filteredArray = array_filter($data['data']);
+            return $this->repo->updatePending($filteredArray);
+        }else{
+            return view('403');
+        }
+
     }
 
     // public function readNotification($id){

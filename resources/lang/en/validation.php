@@ -132,8 +132,10 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
-
         ],
+        'user_id' => [
+            'required' => 'No focal point assigned to the school'
+        ]
     ],
 
     /*

@@ -161,6 +161,8 @@
         island_id = null;
         var id = $('#atolls').val();
         $('#islands option:gt(0)').remove();
+        $('#schools option:gt(0)').remove();
+
         getData('/islands?atoll_id='+id, '#islands');
     }
 

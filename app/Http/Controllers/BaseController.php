@@ -122,6 +122,7 @@ class BaseController extends Controller
 
         if(Gate::allows('is-user')){
                 $data = array_filter($request->all());
+
                 $validator = Validator::make($data, $this->model::$updateRules);
                 if($validator->fails()){
                     $this->formatErrors($validator->errors());

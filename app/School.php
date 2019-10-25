@@ -6,6 +6,7 @@ use App\User;
 use App\Atoll;
 use App\Island;
 use App\Member;
+use App\Activity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -30,9 +31,18 @@ class School extends Model
 
     public static $updateRules = [
         'name' => 'alpha_space|sometimes|max:50',
-        'island_id' => 'sometimes|numeric|exists:islands,id',
-        'atoll_id' => 'sometimes|numeric|exists:atolls,id',
+        'island_id' => 'required_with:atoll_id|numeric|exists:islands,id',
+        'atoll_id' => 'required_with:island_id|numeric|exists:atolls,id',
     ];
+
+    public static function boot(){
+        parent::boot();
+        self::updating(function($model){
+               foreach($model->getDirty() as $key => $value){
+                    $model->activities()->create(['user_id'=>auth()->user()->id, 'attribute' => $key, 'value' => $model->getOriginal($key)]);
+               }
+        });
+    }
 
     public function atoll(){
         return $this->belongsTo(Atoll::class);
@@ -48,5 +58,9 @@ class School extends Model
 
     public function user(){
         return $this->hasOne(User::class);
+    }
+
+    public function activities(){
+        return $this->morphMany(Activity::class, 'activityable');
     }
 }

@@ -7,6 +7,7 @@ use App\User;
 use App\Atoll;
 use App\Island;
 use App\School;
+use App\Activity;
 use App\Document;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -44,7 +45,7 @@ class Member extends Model
         'last_name' => 'alpha_space|string|max:30|required',
         'atoll_id' => 'required|numeric|exists:atolls,id',
         'island_id' => 'required|numeric|exists:islands,id',
-        'id_number' => 'string|required|max:8|unique:members,id_number',
+        'id_number' => 'string|required|min:1|max:8|unique:members,id_number,NULL,id,deleted_at,NULL',
         'school_id' => 'required|numeric|exists:schools,id',
         'birth_date' => 'date|required',
         'address'=> 'nullable|string|nullable|max:30',
@@ -66,9 +67,9 @@ class Member extends Model
         'first_name' => 'alpha_space|string|max:30|sometimes',
         'last_name' => 'alpha_space|string|max:30|sometimes',
         'atoll_id' => 'sometimes|numeric|exists:atolls,id',
-        'island_id' => 'sometimes|numeric|exists:islands,id',
-        'id_number' => 'string|sometimes|max:8|unique:members,id_number',
-        'school_id' => 'sometimes|numeric|exists:schools,id',
+        'island_id' => 'required_with:atoll_id|numeric|exists:islands,id',
+        'id_number' => 'string|sometimes|min:1|max:8|unique:members,id_number',
+        'school_id' => 'required_with:atoll_id,school_id|numeric|exists:schools,id',
         'birth_date' => 'date|sometimes',
         'address'=> 'string|nullable|max:30',
         'contact'=> 'numeric|nullable|digits:7',
@@ -82,6 +83,15 @@ class Member extends Model
         'profile' => 'nullable|mimes:jpg,jpeg,png|max:2048',
         'file_path' => 'nullable|string',
     ];
+
+    public static function boot(){
+        parent::boot();
+        self::updating(function($model){
+               foreach($model->getDirty() as $key => $value){
+                    $model->activities()->create(['user_id'=>auth()->user()->id, 'attribute' => $key, 'value' => $model->getOriginal($key)]);
+               }
+        });
+    }
 
     public function setBirthDateAttribute($value){
         $dob = Carbon::parse($value);
@@ -102,7 +112,6 @@ class Member extends Model
         $dob = Carbon::parse($value);
         return $dob->format('d-m-Y');
     }
-
 
     public function atoll(){
         return $this->belongsTo(Atoll::class);
@@ -126,5 +135,9 @@ class Member extends Model
 
     public function documents(){
         return $this->hasMany(Document::class,'member_id','id_number');
+    }
+
+    public function activities(){
+        return $this->morphMany(Activity::class, 'activityable');
     }
 }

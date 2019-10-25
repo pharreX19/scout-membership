@@ -58,16 +58,16 @@
                         @csrf
                         @method('PUT')
                             <div class="form-group" id="atolls_select">
-                                <label for="name" id="island-name" class="control-label mb-1">Current Password</label>
+                                <label for="current-password" id="island-name" class="control-label mb-1">Current Password</label>
                                 <input id="current-password" name="current_password" type="password" class="form-control" aria-required="true" aria-invalid="false">
                             </div>
                             <div class="form-group">
-                                <label for="name" id="island-name" class="control-label mb-1">New Password</label>
+                                <label for="new-password" id="island-name" class="control-label mb-1">New Password</label>
                                 <input id="new-password" name="password" type="password" class="form-control" aria-required="true" aria-invalid="false">
                             </div>
                             <div class="form-group">
-                                    <label for="name" id="island-name" class="control-label mb-1">Confirm Password</label>
-                                    <input id="new-password" name="password_confirmation" type="password" class="form-control" aria-required="true" aria-invalid="false">
+                                    <label for="confirm-password" id="island-name" class="control-label mb-1">Confirm Password</label>
+                                    <input id="confirm-password" name="password_confirmation" type="password" class="form-control" aria-required="true" aria-invalid="false">
                                 </div>
                             <div >
                                 <button id="payment-button" type="submit" class="btn btn-md btn-info btn-block">

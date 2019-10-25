@@ -19,7 +19,7 @@ class CreateMembersTable extends Migration
             $table->timestamps();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('id_number')->unique();
+            $table->string('id_number');
             $table->date('birth_date');
             $table->string('address')->nullable();
             $table->integer('contact')->nullable();
@@ -38,6 +38,7 @@ class CreateMembersTable extends Migration
             $table->unsignedBigInteger('rank_id');
             $table->foreign('rank_id')->references('id')->on('ranks')->onDelete('cascade');
             $table->softDeletes();
+            $table->unique(['id_number', 'deleted_at']);
         });
     }
 

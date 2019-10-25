@@ -139,12 +139,12 @@
             getData('/atolls','#schoolUpdateModal #atolls');
             getData('/islands','#schoolUpdateModal #islands');
 
-            // $(document).ajaxComplete(function(){
-                $('#schoolUpdateModal').find('#atolls_select select').val(atoll_id);
+            $(document).ajaxComplete(function(){
+                $('#schoolUpdateModal').find('#atolls_select select').val();
                 $('#schoolUpdateModal').find('#islands_select select').val(island_id);
                 $('#schoolUpdateModal').find('#name').val(name);
 
-            // })
+            })
 
         })
 

@@ -9,4 +9,5 @@ $factory->define(Atoll::class, function (Faker $faker) {
     return [
         'name' => 'Baa'
     ];
+
 });

@@ -73,7 +73,7 @@ function populateList(url, parent, modal) {
                         : null) +
                     `' class=" ">` +
                     data.name +
-                    `</td>` +
+                    `&nbsp;&nbsp;<i class="fa fa-pencil"></i></td>` +
                     (data.atoll
                         ? `<td style='cursor:pointer'>` +
                           data.atoll.name +

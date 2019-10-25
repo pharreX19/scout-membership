@@ -5,6 +5,7 @@ namespace App;
 use App\Role;
 use App\Member;
 use App\School;
+use App\Activity;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -86,6 +87,19 @@ class User extends Authenticatable
         'file_path' => 'nullable|string',
     ];
 
+    public static function boot(){
+        parent::boot();
+        self::updating(function($model){
+               foreach($model->getDirty() as $key => $value){
+                    $model->activities()->create([
+                        'user_id'=>auth()->user()->id,
+                        'activityable_type'=>'App\User',
+                        'activityable_id'=> auth()->user()->id,
+                        'attribute' => $key, 'value' => $model->getOriginal($key)]);
+               }
+        });
+    }
+
     public function getAdmin(){
         return $this->where('role_id','=',1)->first();
     }
@@ -105,4 +119,9 @@ class User extends Authenticatable
     public function school(){
         return $this->belongsTo(School::class);
     }
+
+    public function activities(){
+        return $this->hasMany(Activity::class);
+    }
+
 }

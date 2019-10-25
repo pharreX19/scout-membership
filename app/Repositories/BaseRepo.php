@@ -63,7 +63,6 @@ class BaseRepo
      */
     public function show($id)
     {
-        // dd($this->model);
         return $this->model::find($id);
     }
 
@@ -87,8 +86,7 @@ class BaseRepo
      */
     public function update(Request $request, $id)
     {
-        // dd($request->all());
-        $data = array_filter($request->all());
+        $data = $request->all();
         $data = array_filter($data, function($value){
             return $value != null;
         });
@@ -96,7 +94,9 @@ class BaseRepo
         if(! $id){
             return false;
         }
-        return $record->update($data);
+        $record->update($data);
+        return true;
+
     }
 
     /**
@@ -108,10 +108,13 @@ class BaseRepo
     public function destroy($id)
     {
         $record = $this->show($id);
-        // dd($record);
         if($id){
             return $record->delete();
         }
         return false;
     }
 }
+
+
+
+
